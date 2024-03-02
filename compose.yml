@@ -1,0 +1,88 @@
+version: "3.8"
+
+services:
+  php-fpm:
+    container_name: php-fpm
+    build:
+      dockerfile: Dockerfile
+      context: ./docker/php-fpm
+      args:
+        UID: '$UID'
+        GID: '$GID'
+        PHP_VERSION: '$PHP_VERSION'
+    user: php
+    restart: always
+    volumes:
+        - ./nats-laravel:/var/www
+    networks:
+        - private
+
+  caddy:
+    container_name: caddy
+    image: caddy:alpine
+    depends_on:
+      - php-fpm
+    restart: always
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./nats-laravel:/var/www/
+    ports:
+      - '80:80'
+    networks:
+      - private
+      - public
+
+  nats:
+    container_name: nats
+    image: nats:latest
+    entrypoint: /nats-server
+    command: --js --debug --trace --sd /data -p 4222 -m 8222
+    ports:
+      - 4222:4222
+      - 8222:8222
+    volumes:
+      - ./docker/nats/jetstream-cluster/n1:/data
+    networks:
+      - private
+
+  prometheus-nats-exporter:
+    container_name: prometheus-nats
+    image: natsio/prometheus-nats-exporter:latest
+    command: "-connz -varz -channelz -serverz -subz -healthz -routez http://host.docker.internal:8222"
+    ports:
+      - "7777:7777"
+    networks:
+      - private
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./docker/prometheus/prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - private
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    volumes:
+      - ./docker/grafana:/var/lib/grafana
+    environment:
+          - GF_SECURITY_ADMIN_PASSWORD='$GRAFANA_PASSWORD'
+          - GF_DASHBOARDS_MIN_REFRESH_INTERVAL=5s
+    links:
+        - prometheus
+    ports:
+      - "8442:3000"
+    networks:
+      - private
+      - public
+
+networks:
+    private:
+        driver: bridge
+    public:
+        driver: bridge
