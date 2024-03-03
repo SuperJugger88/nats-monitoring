@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   php-fpm:
@@ -13,9 +13,9 @@ services:
     user: php
     restart: always
     volumes:
-        - ./nats-laravel:/var/www
+      - ./nats-laravel:/var/www
     networks:
-        - private
+      - private
 
   caddy:
     container_name: caddy
@@ -38,8 +38,8 @@ services:
     entrypoint: /nats-server
     command: --js --debug --trace --sd /data -p 4222 -m 8222
     ports:
-      - 4222:4222
-      - 8222:8222
+      - '4222:4222'
+      - '8222:8222'
     volumes:
       - ./docker/nats/jetstream-cluster/n1:/data
     networks:
@@ -50,7 +50,7 @@ services:
     image: natsio/prometheus-nats-exporter:latest
     command: "-connz -varz -channelz -serverz -subz -healthz -routez http://host.docker.internal:8222"
     ports:
-      - "7777:7777"
+      - '7777:7777'
     networks:
       - private
 
@@ -61,7 +61,7 @@ services:
       - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./docker/prometheus/prometheus-data:/prometheus
     ports:
-      - "9090:9090"
+      - '9090:9090'
     networks:
       - private
 
@@ -71,18 +71,18 @@ services:
     volumes:
       - ./docker/grafana:/var/lib/grafana
     environment:
-          - GF_SECURITY_ADMIN_PASSWORD='$GRAFANA_PASSWORD'
-          - GF_DASHBOARDS_MIN_REFRESH_INTERVAL=5s
+      - GF_SECURITY_ADMIN_PASSWORD='$GRAFANA_PASSWORD'
+      - GF_DASHBOARDS_MIN_REFRESH_INTERVAL=5s
     links:
-        - prometheus
+      - prometheus
     ports:
-      - "8442:3000"
+      - '8442:3000'
     networks:
       - private
       - public
 
 networks:
-    private:
-        driver: bridge
-    public:
-        driver: bridge
+  private:
+    driver: bridge
+  public:
+    driver: bridge
