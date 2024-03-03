@@ -13,7 +13,7 @@
 1. Клонируйте репозиторий:
 
     ```bash
-    git clone https://github.com/yourusername/nats-monitoring.git
+    git clone git@logema.gitlab.yandexcloud.net:devops/nats-monitoring.git
     cd nats-monitoring
     ```
 
@@ -39,6 +39,8 @@
 
     - Имя пользователя: admin
     - Пароль: rolawast43018460
+
+    Также пароль для входа в веб-интерфейс Grafana дублируется в .env.example
 
 ## Структура каталогов
 
