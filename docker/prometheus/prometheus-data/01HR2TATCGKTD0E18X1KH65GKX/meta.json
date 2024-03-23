@@ -1,0 +1,17 @@
+{
+	"ulid": "01HR2TATCGKTD0E18X1KH65GKX",
+	"minTime": 1709456245297,
+	"maxTime": 1709460000000,
+	"stats": {
+		"numSamples": 20830,
+		"numSeries": 124,
+		"numChunks": 248
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01HR2TATCGKTD0E18X1KH65GKX"
+		]
+	},
+	"version": 1
+}
