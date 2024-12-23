@@ -13,12 +13,9 @@ RUN set -xe; \
     && apt-get install -yqq apt-utils zlib1g-dev g++ git libicu-dev libzip-dev zip unzip libpq-dev libxml2-dev
 
 RUN set -xe; \
-    docker-php-ext-install intl opcache pdo pdo_pgsql pgsql xml zip soap sockets pcntl; \
-    pecl install apcu xdebug; \
-    docker-php-ext-enable apcu xdebug;
+    docker-php-ext-install intl opcache xml zip soap sockets pcntl; \
 
 COPY ./php.ini /usr/local/etc/php/conf.d/php.ini
-COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 USER php
