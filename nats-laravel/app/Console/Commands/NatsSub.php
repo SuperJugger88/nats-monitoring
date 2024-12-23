@@ -14,7 +14,7 @@ class NatsSub extends Command
     public function handle()
     {
         $configuration = new Configuration([
-            'host' => 'host.docker.internal',
+            'host' => 'nats',
             'jwt' => null,
             'lang' => 'php',
             'pass' => null,

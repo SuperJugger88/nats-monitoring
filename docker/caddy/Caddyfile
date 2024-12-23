@@ -1,5 +1,9 @@
-:80 {
-	root * /var/www/public
-	file_server
-	php_fastcgi php-fpm:9000
+http://localhost {
+    root * /var/www/public
+    file_server
+    php_fastcgi php-fpm:9000
+}
+
+http://grafana.localhost {
+    reverse_proxy grafana:3000
 }

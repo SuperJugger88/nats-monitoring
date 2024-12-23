@@ -1,3 +1,5 @@
 .env.example
 **/.DS_Store
 ._*
+docker/prometheus/prometheus-data/**
+docker/nats/jetstream-cluster/n1
